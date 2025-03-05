@@ -16,6 +16,7 @@ import com.nimbusds.jwt.SignedJWT;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Base64;
 import java.util.Date;
 
 @Slf4j
@@ -33,7 +35,10 @@ public class AuthenticationService {
 
 
     @NonFinal
-    protected static final String SIGNER_KEY = "AIK+nHPZ6l6YX4B0/bWengVyFA4o4aEa0L4+2f9kZHh0bzZcCa6OIpBbNxO3INn1";
+    @Value("${jwt.signkey}")
+    protected String SIGNER_KEY;
+
+
 
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
@@ -96,5 +101,7 @@ public class AuthenticationService {
             log.error("Cannot create token", e);
             throw new RuntimeException(e);
         }
+
     }
+
 }
