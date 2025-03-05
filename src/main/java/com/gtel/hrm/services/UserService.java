@@ -3,6 +3,7 @@ package com.gtel.hrm.services;
 
 import com.gtel.hrm.dto.request.UserCreateRequest;
 import com.gtel.hrm.dto.request.UserUpdateRequest;
+import com.gtel.hrm.enums.Role;
 import com.gtel.hrm.exception.AppException;
 import com.gtel.hrm.exception.ErrorCode;
 import com.gtel.hrm.models.Users;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -21,6 +23,8 @@ public class UserService {
     private UserRepo userRepo;
 //    @Autowired
 //    private EmployeeService employeeService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Users createUser(UserCreateRequest request) {
         if (request == null) {
@@ -42,10 +46,13 @@ public class UserService {
 //        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         user.setUsername(request.getUsername());
-//        user.setPassword(request.getPassword());
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        user.setPassword(request.getPassword());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(request.getRole());
+
+        HashSet<String> roles = new HashSet<>();
+        roles.add(Role.USER.name());
+
+        user.setRole(roles);
 //        user.setEmployees(employees);
         return userRepo.save(user);
     }
@@ -60,10 +67,10 @@ public class UserService {
 
     public Users updateUser(@PathVariable Long id, UserUpdateRequest request) {
         Users user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword());
-        user.setRole(request.getRole());
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         return userRepo.save(user);
     }
