@@ -52,7 +52,7 @@ public class UserService {
         HashSet<String> roles = new HashSet<>();
         roles.add(Role.USER.name());
 
-        user.setRole(roles);
+        user.setRoles(roles);
 //        user.setEmployees(employees);
         return userRepo.save(user);
     }
