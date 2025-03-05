@@ -8,17 +8,18 @@ import jakarta.persistence.*;
 public class Employees {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idEp;
+    @Column(name = "id_ep")
+    private Long idEp;
     private String nameEp;
     private int ageEp;
     private String phoneEp;
     private String emailEp;
 
-    public int getIdEp() {
+    public Long getIdEp() {
         return idEp;
     }
 
-    public void setIdEp(int idEp) {
+    public void setIdEp(Long idEp) {
         this.idEp = idEp;
     }
 

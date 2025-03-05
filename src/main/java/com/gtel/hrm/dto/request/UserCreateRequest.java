@@ -1,21 +1,12 @@
-package com.gtel.hrm.models;
+package com.gtel.hrm.dto.request;
 
-
-import com.gtel.hrm.exception.ErrorCode;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
-@Entity
-public class Users {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_user")
-    private Long idUser;
-
-
+public class UserCreateRequest {
+    @Size(min = 3, message = "USERNAME_INVALID")
     private String username;
 
-
+    @Size(min = 8, message = "PASSWORD_INVALID")
     private String password;
     private String role;
 
@@ -23,16 +14,20 @@ public class Users {
 //    @JoinColumn(name = "id_ep", unique = true)
 //    private Employees employees;
 
-    public Users() {
-    }
+//    public Long getEmployeeId() {
+//        return idEp;
+//    }
+//
+//    public void setEmployeeId(Long idEp) {
+//        this.idEp = idEp;
+//    }
 
-    public Long getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(Long idUser) {
-        this.idUser = idUser;
-    }
+//    public Long getEpId() {
+//        if (employees == null || employees.getIdEp() == null) {
+//            throw new IllegalArgumentException("Employee ID must not be null");
+//        }
+//        return employees.getIdEp();
+//    }
 
     public String getUsername() {
         return username;
@@ -57,12 +52,4 @@ public class Users {
     public void setRole(String role) {
         this.role = role;
     }
-
-//    public Employees getEmployees() {
-//        return employees;
-//    }
-//
-//    public void setEmployees(Employees employees) {
-//        this.employees = employees;
-//    }
 }

@@ -24,8 +24,8 @@ public class EmployeeController {
     }
 
     @PostMapping("/getEpbyId")
-    public ResponseEntity<Employees> getEmployeeById(@RequestBody Map<String, Integer> request) {
-        int idEp = request.get("idEp");
+    public ResponseEntity<Employees> getEmployeeById(@RequestBody Map<String, Long> request) {
+        Long idEp = request.get("idEp");
         Optional<Employees> employee = employeeService.getEmployeeById(idEp);
         if(employee.isPresent()) {
             return ResponseEntity.ok(employee.get());
@@ -40,8 +40,13 @@ public class EmployeeController {
     }
 
     @PostMapping("/deleteEp")
-    public ResponseEntity<?> deleteUser(@RequestBody Map<String, Integer> requestBody) {
-        int idEp = requestBody.get("idEp");
+    public ResponseEntity<?> deleteUser(@RequestBody Map<String, Long> requestBody) {
+        Long idEp = requestBody.get("idEp");
+
+        if(idEp == null) {
+            return ResponseEntity.badRequest().body("Employee ID must not be null");
+        }
+
         boolean deleted = employeeService.deleteEmployeeById(idEp);
         if(deleted){
             return ResponseEntity.ok("Delete Successfully");

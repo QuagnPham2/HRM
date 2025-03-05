@@ -19,21 +19,23 @@ public class EmployeeService {
         return employeeRepo.findAll();
     }
 
-    public Optional<Employees> getEmployeeById(int idEp) {
+    public Optional<Employees> getEmployeeById(Long idEp) {
         return employeeRepo.findById(idEp);
     }
 
     public Employees createUser(Employees employees){
-        employees.setIdEp(0);
+        employees.setIdEp(0L);
         return employeeRepo.save(employees);
     }
 
-    public boolean deleteEmployeeById(int idEp) {
+    public boolean deleteEmployeeById(Long idEp) {
+        if(idEp == null) {
+            throw new IllegalArgumentException("ID must not be null");
+        }
         if(employeeRepo.existsById(idEp)) {
             employeeRepo.deleteById(idEp);
             return true;
         }
-
         return false;
     }
 
