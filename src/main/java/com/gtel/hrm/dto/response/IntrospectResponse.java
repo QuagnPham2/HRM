@@ -10,9 +10,6 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class AuthenticationResponse {
-    String token;
-    private boolean authenticated;
-
-
+public class IntrospectResponse {
+    private boolean valid;
 }
