@@ -8,7 +8,9 @@ import com.gtel.hrm.exception.AppException;
 import com.gtel.hrm.exception.ErrorCode;
 import com.gtel.hrm.models.Users;
 import com.gtel.hrm.repositories.UserRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.HashSet;
 import java.util.List;
-
+@Slf4j
 @Service
 public class UserService {
     @Autowired
@@ -58,6 +60,10 @@ public class UserService {
     }
 
     public List<Users> getAllUsers() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info("Username {}", authentication.getName());
+        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
+
         return userRepo.findAll();
     }
 
