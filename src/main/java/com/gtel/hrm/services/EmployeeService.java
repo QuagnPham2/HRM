@@ -24,7 +24,7 @@ public class EmployeeService {
     }
 
     public Employees createUser(Employees employees){
-        employees.setIdEp(0L);
+        employees.setIdEp(null);
         return employeeRepo.save(employees);
     }
 

@@ -4,6 +4,8 @@ package com.gtel.hrm.controllers;
 import com.gtel.hrm.dto.request.ApiResponse;
 import com.gtel.hrm.dto.request.UserCreateRequest;
 import com.gtel.hrm.dto.request.UserUpdateRequest;
+import com.gtel.hrm.dto.response.UserResponse;
+import com.gtel.hrm.exception.ErrorCode;
 import com.gtel.hrm.models.Users;
 import com.gtel.hrm.services.UserService;
 import jakarta.validation.Valid;
@@ -61,4 +63,13 @@ public class UserController {
         userService.deleteUser(userId);
         return ResponseEntity.ok("User deleted successfully");
     }
+
+    @GetMapping("/getMyInfo")
+    ApiResponse<UserResponse> getMyInfo(){
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getMyInfo())
+                .code(1000)
+                .build();
+    }
+
 }

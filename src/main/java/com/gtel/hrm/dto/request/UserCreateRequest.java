@@ -19,6 +19,7 @@ public class UserCreateRequest {
 
     @Size(min = 8, message = "PASSWORD_INVALID")
     private String password;
+    private String email;
     private Set<String> role;
 
 //    @OneToOne(cascade = CascadeType.ALL)

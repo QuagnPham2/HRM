@@ -23,4 +23,9 @@ public class ApiResponse<T> {
         this.message = message;
         this.result = result;
     }
+
+    public ApiResponse(boolean success, String message) {
+        this.code = success ? 1000 : 2000;
+        this.message = message;
+    }
 }

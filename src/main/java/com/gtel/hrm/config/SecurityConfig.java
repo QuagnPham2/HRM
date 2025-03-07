@@ -23,7 +23,7 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS = {"/user/addUser",
-            "/auth/token", "/auth/introspect"
+            "/auth/token", "/auth/introspect", "/employee/addEp"
     };
 
     @Value("${jwt.signkey}")
@@ -33,7 +33,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/user/getAllUser")
+                        .requestMatchers(HttpMethod.GET, "/user/getAllUser", "/employee/getAllEp")
                         .hasRole(Role.ADMIN.name())
                         .anyRequest().authenticated());
         http

@@ -22,8 +22,10 @@ public class Users {
     private Long idUser;
     private String username;
     private String password;
+    private String email;
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> role;
+
 
     public Long getIdUser() {
         return idUser;
@@ -47,6 +49,14 @@ public class Users {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Set<String> getRole() {
