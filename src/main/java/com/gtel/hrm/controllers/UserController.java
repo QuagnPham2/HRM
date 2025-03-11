@@ -64,12 +64,12 @@ public class UserController {
         return ResponseEntity.ok("User deleted successfully");
     }
 
-//    @GetMapping("/getMyInfo")
-//    ApiResponse<UserResponse> getMyInfo(){
-//        return ApiResponse.<UserResponse>builder()
-//                .result(userService.getMyInfo())
-//                .code(1000)
-//                .build();
-//    }
+    @GetMapping("/getMyInfo")
+    ApiResponse<UserResponse> getMyInfo(){
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getMyInfo())
+                .code(1000)
+                .build();
+    }
 
 }

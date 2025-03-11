@@ -30,7 +30,7 @@ public class Users {
 
 
     @ManyToMany
-    private Set<Role> role;
+    private Set<Role> roles;
 
 
 

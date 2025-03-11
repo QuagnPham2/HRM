@@ -7,11 +7,14 @@ import com.gtel.hrm.dto.response.UserResponse;
 import com.gtel.hrm.enums.Role;
 import com.gtel.hrm.exception.AppException;
 import com.gtel.hrm.exception.ErrorCode;
+import com.gtel.hrm.mapper.UserMapper;
 import com.gtel.hrm.models.Users;
+import com.gtel.hrm.repositories.RoleRepo;
 import com.gtel.hrm.repositories.UserRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,24 +33,21 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private RoleRepo roleRepo;
+
+    @Autowired
+    private UserMapper userMapper;
+
     public Users createUser(UserCreateRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("Request body must not be null");
         }
-
-//        if (request.getEpId() == null) {
-//            throw new IllegalArgumentException("Employee ID must not be null");
-//        }
-//        Employees employees = employeeService.getEmployeeById(request.getEmployeeId())
-//                .orElseThrow(()->new RuntimeException("Employee not found with ID: " + request.getEmployeeId()));
-
         if(userRepo.existsByUsername(request.getUsername())){
             throw new AppException(ErrorCode.USER_EXISTED);
         }
         Users user = new Users();
 
-//        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-//        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword());
@@ -58,11 +58,12 @@ public class UserService {
         HashSet<String> roles = new HashSet<>();
         roles.add(Role.USER.name());
 
-//        user.setRoles(roles);
-//        user.setEmployees(employees);
         return userRepo.save(user);
+
     }
 
+//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('APPROVE_POST')")
     public List<Users> getAllUsers() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Username {}", authentication.getName());
@@ -85,6 +86,9 @@ public class UserService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
+        var roles = roleRepo.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
+
         return userRepo.save(user);
     }
 
@@ -95,13 +99,12 @@ public class UserService {
         userRepo.deleteById(userId);
     }
 
-//    public UserResponse getMyInfo(){
-//        var context = SecurityContextHolder.getContext();
-//        String name = context.getAuthentication().getName();
-//
-//        Users user = userRepo.findByUsername(name)
-//                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-//
-//        return new UserResponse(user.getUsername(),user.getEmail() , user.getRole());
-//    }
+    public UserResponse getMyInfo(){
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        Users user = userRepo.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        return userMapper.toUserResponse(user);
+    }
 }
