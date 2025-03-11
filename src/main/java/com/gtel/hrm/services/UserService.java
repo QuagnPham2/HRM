@@ -58,7 +58,7 @@ public class UserService {
         HashSet<String> roles = new HashSet<>();
         roles.add(Role.USER.name());
 
-        user.setRoles(roles);
+//        user.setRoles(roles);
 //        user.setEmployees(employees);
         return userRepo.save(user);
     }
@@ -95,13 +95,13 @@ public class UserService {
         userRepo.deleteById(userId);
     }
 
-    public UserResponse getMyInfo(){
-        var context = SecurityContextHolder.getContext();
-        String name = context.getAuthentication().getName();
-
-        Users user = userRepo.findByUsername(name)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
-        return new UserResponse(user.getUsername(),user.getEmail() , user.getRole());
-    }
+//    public UserResponse getMyInfo(){
+//        var context = SecurityContextHolder.getContext();
+//        String name = context.getAuthentication().getName();
+//
+//        Users user = userRepo.findByUsername(name)
+//                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+//
+//        return new UserResponse(user.getUsername(),user.getEmail() , user.getRole());
+//    }
 }
